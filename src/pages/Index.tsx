@@ -167,7 +167,6 @@ const Index: React.FC = () => {
         <main className="flex-1">
           <Toolbar
             isLocked={isLocked}
-            onShuffle={handleShuffle}
             onReset={handleReset}
             onSaveJson={handleSaveJson}
           />
