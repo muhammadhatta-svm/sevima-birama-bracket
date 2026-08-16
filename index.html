@@ -481,9 +481,9 @@
     return false; // secara statistik nyaris mustahil tercapai
   }
   // Susunan tim di atas ditulis berurutan per district (jadi banyak yang
-  // bentrok kalau dipakai apa adanya) — acak sekali di awal supaya tampilan
-  // pertama pun sudah sesuai aturan "tidak boleh 1 district ketemu sendiri".
-  shuffleTeamsNoDistrictClash();
+  // bentrok kalau dipakai apa adanya). Agar tidak berubah-ubah saat refresh,
+  // pengacakan hanya dilakukan saat belum ada state tersimpan. Jika ada data
+  // yang sudah disimpan, state itulah yang dipakai dan tidak diacak ulang.
 
   // ---------------- Build match graph ----------------
   // 34 tim, tanpa babak pra-kualifikasi: semua tim bertanding di babak pertama.
@@ -1277,10 +1277,15 @@
     });
   });
 
-  restorePersistedState().finally(() => {
+  (async function(){
+    const loaded = await restorePersistedState();
+    if(!loaded){
+      shuffleTeamsNoDistrictClash();
+      await persistState();
+    }
     updateLockUI();
     renderAll();
-  });
+  })();
 })();
 </script>
 </body>
