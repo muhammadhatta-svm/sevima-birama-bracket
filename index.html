@@ -669,7 +669,30 @@
   const winners = {}; // matchId -> team name string or null
   const scores = {};  // matchId -> [skorTim1, skorTim2] (string), independen dari penanda pemenang
   const ACCESS_KEY = 'SEVIMA2026'; // Ganti key ini sesuai kebutuhan
+  const STORAGE_KEY = 'sevima-bracket-state-v1';
   let isLocked = true;
+
+  function persistState(){
+    try {
+      const state = getSerializableState();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.warn('Gagal menyimpan state ke localStorage:', error);
+    }
+  }
+
+  function restorePersistedState(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      const data = JSON.parse(raw);
+      applySerializableState(data);
+      return true;
+    } catch (error) {
+      console.warn('Gagal memuat state dari localStorage:', error);
+      return false;
+    }
+  }
 
   const lockToggleBtn = document.getElementById('lockToggleBtn');
   const resetBtn = document.getElementById('resetBtn');
@@ -856,6 +879,7 @@
     if(isLocked) return;
     if(!scores[matchId]) scores[matchId] = ['',''];
     scores[matchId][slot-1] = value;
+    persistState();
     renderSchedulePanel();
   }
 
@@ -1044,6 +1068,7 @@
     const name = slot===1 ? resolve(m.team1) : resolve(m.team2);
     if(!name) return;
     winners[matchId] = (winners[matchId]===name) ? null : name; // click again to unpick
+    persistState();
     renderAll();
   }
 
@@ -1053,6 +1078,23 @@
   }
 
   function getSerializableState(){
+    const matchesState = roundOrder.flatMap(round =>
+      roundIds[round].map(matchId => {
+        const m = matches[matchId];
+        return {
+          id: matchId,
+          round: m.round,
+          roundLabel: roundLabels[m.round],
+          team1: resolve(m.team1),
+          team2: resolve(m.team2),
+          team1Code: codeOf(m.team1),
+          team2Code: codeOf(m.team2),
+          winner: winners[matchId] || null,
+          score: scores[matchId] ? [String(scores[matchId][0] ?? ''), String(scores[matchId][1] ?? '')] : ['', '']
+        };
+      })
+    );
+
     return {
       version: 1,
       savedAt: new Date().toISOString(),
@@ -1060,7 +1102,8 @@
       winners: {...winners},
       scores: Object.fromEntries(
         Object.entries(scores).map(([matchId, pair])=> [matchId, [String(pair[0] ?? ''), String(pair[1] ?? '')]])
-      )
+      ),
+      matches: matchesState
     };
   }
 
@@ -1077,6 +1120,22 @@
     });
 
     Object.keys(winners).forEach(k=> delete winners[k]);
+    Object.keys(scores).forEach(k=> delete scores[k]);
+
+    const applyMatchArray = Array.isArray(data.matches) && data.matches.length;
+    if(applyMatchArray){
+      data.matches.forEach(item=>{
+        if(!item || !matches[item.id]) return;
+        if(item.winner !== undefined && item.winner !== null){
+          winners[item.id] = String(item.winner);
+        }
+        if(Array.isArray(item.score) && item.score.length===2){
+          scores[item.id] = [String(item.score[0] ?? ''), String(item.score[1] ?? '')];
+        }
+      });
+      return;
+    }
+
     if(data.winners && typeof data.winners==='object'){
       Object.entries(data.winners).forEach(([matchId, winnerName])=>{
         if(!matches[matchId]) return;
@@ -1084,7 +1143,6 @@
       });
     }
 
-    Object.keys(scores).forEach(k=> delete scores[k]);
     if(data.scores && typeof data.scores==='object'){
       Object.entries(data.scores).forEach(([matchId, pair])=>{
         if(!matches[matchId]) return;
@@ -1097,6 +1155,7 @@
   resetBtn.addEventListener('click', ()=>{
     Object.keys(winners).forEach(k=> winners[k]=null);
     clearAllScores();
+    persistState();
     renderAll();
   });
 
@@ -1109,6 +1168,7 @@
     shuffleTeamsNoDistrictClash();
     Object.keys(winners).forEach(k=> winners[k]=null);
     clearAllScores();
+    persistState();
     renderAll();
   });
 
@@ -1126,6 +1186,7 @@
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+    persistState();
   });
 
   loadJsonBtn.addEventListener('click', ()=>{
@@ -1153,6 +1214,7 @@
       if(key===ACCESS_KEY){
         isLocked = false;
         updateLockUI();
+        persistState();
         renderAll();
         window.alert('Kunci input berhasil dibuka.');
       } else {
@@ -1163,6 +1225,7 @@
 
     isLocked = true;
     updateLockUI();
+    persistState();
     renderAll();
   });
 
@@ -1177,6 +1240,7 @@
     });
   });
 
+  restorePersistedState();
   updateLockUI();
   renderAll();
 })();
