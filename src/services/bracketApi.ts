@@ -1,5 +1,5 @@
 import { BracketState, TeamPair } from '../types/bracket';
-import { STORAGE_KEY, STATE_FILE_PATH, DEFAULT_TEAMS, MATCHES } from '../utils/bracketLogic';
+import { STATE_FILE_PATH, DEFAULT_TEAMS, MATCHES } from '../utils/bracketLogic';
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -16,16 +16,12 @@ export async function persistState(state: BracketState): Promise<boolean> {
     });
     if (response.ok) {
       return true;
+    } else {
+      console.warn('POST state ke BE API gagal dengan status:', response.status);
+      return false;
     }
   } catch (error) {
-    console.warn('POST state ke BE API gagal, fallback ke localStorage:', error);
-  }
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    return true;
-  } catch (error) {
-    console.warn('Gagal menyimpan state ke localStorage:', error);
+    console.error('Gagal mengirim state ke Backend API:', error);
     return false;
   }
 }
@@ -41,9 +37,10 @@ export async function restorePersistedState(): Promise<BracketState | null> {
       }
     }
   } catch (error) {
-    console.warn('Gagal memuat state dari BE API, mencoba fallback:', error);
+    console.warn('Gagal memuat state dari BE API:', error);
   }
 
+  // Fallback opsional ke static JSON file jika backend belum mengembalikan data
   try {
     const response = await fetch(STATE_FILE_PATH, { cache: 'no-store' });
     if (response.ok) {
@@ -54,17 +51,6 @@ export async function restorePersistedState(): Promise<BracketState | null> {
     }
   } catch (error) {
     // Ignore static fetch error
-  }
-
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (validateStateData(data)) {
-      return sanitizeStateData(data);
-    }
-  } catch (error) {
-    console.warn('Gagal memuat state dari localStorage:', error);
   }
 
   return null;
