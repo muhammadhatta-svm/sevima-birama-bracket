@@ -16,15 +16,23 @@ export const STORAGE_KEY = 'sevima-bracket-state-v1';
 export const STATE_FILE_PATH = 'data/bracket-state.json';
 
 export const DEFAULT_TEAMS: TeamPair[] = [
-  ["Fahrul - Winda", "D1"], ["Hatta - Maria", "D2A"], ["Anjar - Dina", "D2B"], ["Made - Ai", "D3"],
-  ["Rivan - Galuh", "D4"], ["Kresna - Stefany", "D5"], ["Adam - Rinda", "D8"], ["Fauzan - Sabrina", "D9"],
-  ["Aden - Laila", "D10"], ["Alwi - Silvi", "D11"], ["Yafie - Ivo", "D12A"], ["Oi - Zidni", "D12B"],
-  ["Toni - Sabilla", "D13"], ["Kukuh - Manda", "D14A"], ["Reva - Nanda", "D14B"], ["Reza - Adel", "D15A"],
-  ["Rizaldi - Shesil", "D15B"], ["Zidan - Aliyah", "D16A"], ["Daffa - Zella", "D16B"], ["Zidane - Jenni", "D17A"],
-  ["Dzikry - Karin", "D17B"], ["Afrizal - Bella", "D18"], ["Hanif - Saltsa", "D19A"], ["Yoga - Frida", "D19B"],
-  ["Dicky - Iis", "D20A"], ["Langgeng - Henny", "D20B"], ["Pras - Ega", "D22A"], ["Faaris - Nurin", "D22B"],
-  ["Darwin - Nesya", "D23A"], ["Agus - Murni", "D23B"], ["Alam - Ferli", "D24A"], ["Aditya - Monic", "D24B"],
-  ["Shohib - Feli", "D25A"], ["Safaat - Devi", "D25B"]
+  ["Pras - Ega", "D22A"], ["Aden - Laila", "D10"],
+  ["Reva - Nanda", "D14B"], ["Afrizal - Bella", "D18"],
+  ["Yoga - Frida", "D19B"], ["Safaat - Devi", "D25B"],
+  ["Alam - Ferli", "D24A"], ["Fauzan - Sabrina", "D9"],
+  ["Faaris - Nurin", "D22B"], ["Agus - Murni", "D23B"],
+  ["Adam - Rinda", "D8"], ["Kresna - Stefany", "D5"],
+  ["Hanif - Saltsa", "D19A"], ["Alwi - Silvi", "D11"],
+  ["Made - Ai", "D3"], ["Aditya - Monic", "D24B"],
+  ["Rizaldi - Shesil", "D15B"], ["Darwin - Nesya", "D23A"],
+  ["Yafie - Ivo", "D12A"], ["Zidane - Jenni", "D17A"],
+  ["Oi - Zidni", "D12B"], ["Toni - Sabilla", "D13"],
+  ["Hatta - Maria", "D2A"], ["Langgeng - Henny", "D20B"],
+  ["Dzikry - Karin", "D17B"], ["Dicky - Iis", "D20A"],
+  ["Daffa - Zella", "D16B"], ["Rivan - Galuh", "D4"],
+  ["Fahrul - Winda", "D1"], ["Reza - Adel", "D15A"],
+  ["Shohib - Feli", "D25A"], ["Anjar - Dina", "D2B"],
+  ["Kukuh - Manda", "D14A"], ["Zidan - Aliyah", "D16A"]
 ];
 
 export function districtOf(code: string): string {
@@ -222,7 +230,12 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
     start: { hour: 17, minute: 15 },
     windowEnd: { hour: 21, minute: 0 },
     dresscode: 'Baju Sevima',
-    ids: ['P1', 'P2', ...ROUND_IDS.R32],
+    ids: [
+      'P1', 'P2',
+      'R32-1', 'R32-2', 'R32-3', 'R32-4', 'R32-5', 'R32-6',
+      'R32-7', 'R32-8', 'R32-9', 'R32-10', 'R32-11', 'R32-12',
+      'R32-13', 'R32-14', 'R32-15'
+    ],
   },
   {
     date: '2026-08-19',
@@ -231,7 +244,7 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
     start: { hour: 18, minute: 0 },
     windowEnd: { hour: 21, minute: 0 },
     dresscode: 'Baju Merah Putih',
-    ids: [...ROUND_IDS.R16, ...ROUND_IDS.QF],
+    ids: ['R32-16', ...ROUND_IDS.R16, ...ROUND_IDS.QF],
   },
   {
     date: '2026-08-20',
