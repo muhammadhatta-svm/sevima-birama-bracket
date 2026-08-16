@@ -230,12 +230,7 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
     start: { hour: 17, minute: 15 },
     windowEnd: { hour: 21, minute: 0 },
     dresscode: 'Baju Sevima',
-    ids: [
-      'P1', 'P2',
-      'R32-1', 'R32-2', 'R32-3', 'R32-4', 'R32-5', 'R32-6',
-      'R32-7', 'R32-8', 'R32-9', 'R32-10', 'R32-11', 'R32-12',
-      'R32-13', 'R32-14', 'R32-15'
-    ],
+    ids: ['P1', 'P2', ...ROUND_IDS.R32],
   },
   {
     date: '2026-08-19',
@@ -244,7 +239,7 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
     start: { hour: 18, minute: 0 },
     windowEnd: { hour: 21, minute: 0 },
     dresscode: 'Baju Merah Putih',
-    ids: ['R32-16', ...ROUND_IDS.R16, ...ROUND_IDS.QF],
+    ids: [...ROUND_IDS.R16, ...ROUND_IDS.QF],
   },
   {
     date: '2026-08-20',

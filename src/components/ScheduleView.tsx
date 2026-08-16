@@ -34,13 +34,8 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ teams, winners, scor
 
     return (
       <div className="flex flex-col gap-0.5 text-[12px]">
-        <div className="font-['JetBrains_Mono',monospace] text-[9px] tracking-[0.06em] uppercase text-[#4d6488] flex items-center gap-1.5">
-          <span>{m.round} · {matchId}</span>
-          {matchId === 'R32-16' && (
-            <span className="px-1.5 py-0.5 rounded bg-[#d7ff4e]/20 text-[#d7ff4e] font-bold text-[8px]">
-              DIPINDAH DARI SELASA
-            </span>
-          )}
+        <div className="font-['JetBrains_Mono',monospace] text-[9px] tracking-[0.06em] uppercase text-[#4d6488]">
+          {m.round} · {matchId}
         </div>
         <div className="text-[#eef3f8]">
           {t1 ? (
@@ -78,17 +73,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ teams, winners, scor
   return (
     <div className="max-w-[1100px] mx-auto px-4 sm:px-8 mt-5 pb-16">
       <div className="bg-[#16304f] border border-[#33517a] rounded-xl p-4 sm:p-6 shadow-xl">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[#33517a] pb-4 mb-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[#33517a] pb-4 mb-6">
           <h2 className="font-['Oswald',sans-serif] font-semibold text-[18px] sm:text-[20px] tracking-[0.03em] uppercase text-[#eef3f8] flex items-center gap-2">
             <Calendar className="w-5 h-5 text-[#d7ff4e]" /> 🗓️ Jadwal Pertandingan
           </h2>
           <div className="font-['JetBrains_Mono',monospace] text-[11px] text-[#7d93b8]">
             3 Lapangan · 3 Hari · 18–20 Agustus 2026
           </div>
-        </div>
-
-        <div className="mb-6 p-3.5 bg-[#0c1f3a] border border-[#33517a] rounded-lg text-[12px] text-[#7d93b8] leading-relaxed">
-          <span className="text-[#d7ff4e] font-semibold">Koreksi:</span> Pasangan tim pada slot P1, P2, dan R32-10 s.d. R32-15 sebelumnya tertukar dari bracket, sudah diperbaiki di bawah. Partai <b className="text-[#eef3f8]">R32-16 (Pemenang P1 vs Pemenang P2)</b> tidak bisa dimainkan Selasa karena hasil pra-babak belum ada — dipindah ke <b className="text-[#d7ff4e]">Rabu, 19 Agustus 2026</b>.
         </div>
 
         <div className="space-y-8">
