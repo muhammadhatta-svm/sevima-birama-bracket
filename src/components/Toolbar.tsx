@@ -1,16 +1,14 @@
 import React from 'react';
-import { Dices, RotateCcw, Save } from 'lucide-react';
+import { RotateCcw, Save } from 'lucide-react';
 
 interface ToolbarProps {
   isLocked: boolean;
-  onShuffle: () => void;
   onReset: () => void;
   onSaveJson: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
   isLocked,
-  onShuffle,
   onReset,
   onSaveJson,
 }) => {
@@ -25,13 +23,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
       {!isLocked && (
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            type="button"
-            onClick={onShuffle}
-            className="font-['JetBrains_Mono',monospace] text-[12px] tracking-[0.04em] bg-transparent text-[#7d93b8] border border-[#33517a] px-4 py-2 rounded-md hover:border-[#d7ff4e] hover:text-[#d7ff4e] transition-all duration-150 flex items-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d7ff4e]"
-          >
-            <Dices className="w-3.5 h-3.5" /> 🎲 ACAK PENEMPATAN TIM
-          </button>
           <button
             type="button"
             onClick={onReset}

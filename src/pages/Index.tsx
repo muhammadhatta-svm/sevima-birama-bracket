@@ -55,12 +55,10 @@ const Index: React.FC = () => {
         setWinners(persisted.winners);
         setScores(persisted.scores);
       } else {
-        const shuffled = shuffleTeamsNoDistrictClash(DEFAULT_TEAMS);
-        setTeams(shuffled);
-        await saveCurrentState(true, shuffled, {}, {});
+        setTeams(DEFAULT_TEAMS);
       }
     })();
-  }, [saveCurrentState]);
+  }, []);
 
   // Clean stale winners in topological order when winners or teams change
   const cleanStaleWinners = useCallback(
@@ -118,17 +116,6 @@ const Index: React.FC = () => {
     saveCurrentState(isLocked, teams, winners, nextScores);
   };
 
-  // Handle shuffling teams
-  const handleShuffle = () => {
-    if (isLocked) return;
-
-    const shuffled = shuffleTeamsNoDistrictClash(teams);
-    setTeams(shuffled);
-    setWinners({});
-    setScores({});
-    saveCurrentState(isLocked, shuffled, {}, {});
-  };
-
   // Handle resetting all results
   const handleReset = () => {
     if (isLocked) return;
@@ -140,10 +127,8 @@ const Index: React.FC = () => {
 
   // Handle saving JSON download
   const handleSaveJson = async () => {
-    if (isLocked) return;
     const serializable = getSerializableState(isLocked, teams, winners, scores);
     downloadStateFile(serializable);
-    await persistState(serializable);
   };
 
   // Handle loading JSON file

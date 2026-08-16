@@ -46,7 +46,7 @@ export const HeroHeader: React.FC<HeroHeaderProps> = ({ isLocked, onToggleLock }
         </div>
 
         <p className="text-[#7d93b8] text-[14px] sm:text-[15px] max-w-[640px] leading-relaxed mb-6">
-          34 tim bertanding dalam format gugur langsung selama 3 hari (18-20 Agustus 2026) di 3 lapangan — hari ketiga khusus 4 tim semifinalis (Semifinal, Perebutan Juara 3, dan Final). Klik nama tim yang menang pada tiap partai untuk memajukannya ke babak berikutnya, isi kotak kecil di sampingnya untuk mencatat skor, atau pakai tombol Acak untuk mengundi ulang penempatan tim. undian otomatis menghindari 2 tim dari district yang sama bertemu di babak pertama (mis. D2A vs D2B). Buka menu Jadwal untuk melihat jam main tiap partai di Lapangan 1, 2, dan 3 tiap harinya.
+          34 tim bertanding dalam format gugur langsung selama 3 hari (18–20 Agustus 2026) di 3 lapangan — hari ketiga khusus 4 tim semifinalis (Semifinal, Perebutan Juara 3, dan Final). Klik nama tim yang menang pada tiap partai untuk memajukannya ke babak berikutnya, dan isi kotak kecil di sampingnya untuk mencatat skor. Buka menu Jadwal untuk melihat jam main tiap partai di Lapangan 1, 2, dan 3 tiap harinya.
         </p>
 
         {/* Roadmap steps */}

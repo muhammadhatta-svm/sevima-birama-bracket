@@ -7,11 +7,17 @@ const API_URL =
 
 export const BACKEND_BRACKET_ENDPOINT = `${API_URL.replace(/\/$/, '')}/chatbot/bracket`;
 
+export const AUTH_HEADERS = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer sevima2026',
+  'x-token': 'sevima2026',
+};
+
 export async function persistState(state: BracketState): Promise<boolean> {
   try {
     const response = await fetch(BACKEND_BRACKET_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: AUTH_HEADERS,
       body: JSON.stringify(state),
     });
     if (response.ok) {
@@ -28,7 +34,11 @@ export async function persistState(state: BracketState): Promise<boolean> {
 
 export async function restorePersistedState(): Promise<BracketState | null> {
   try {
-    const response = await fetch(BACKEND_BRACKET_ENDPOINT, { cache: 'no-store' });
+    const response = await fetch(BACKEND_BRACKET_ENDPOINT, {
+      method: 'GET',
+      headers: AUTH_HEADERS,
+      cache: 'no-store',
+    });
     if (response.ok) {
       const json = await response.json();
       const data = json?.data || json;
@@ -42,7 +52,10 @@ export async function restorePersistedState(): Promise<BracketState | null> {
 
   // Fallback opsional ke static JSON file jika backend belum mengembalikan data
   try {
-    const response = await fetch(STATE_FILE_PATH, { cache: 'no-store' });
+    const response = await fetch(STATE_FILE_PATH, {
+      cache: 'no-store',
+      headers: { 'x-token': 'sevima2026' },
+    });
     if (response.ok) {
       const data = await response.json();
       if (validateStateData(data)) {
