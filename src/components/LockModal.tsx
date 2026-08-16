@@ -76,7 +76,7 @@ export const LockModal: React.FC<LockModalProps> = ({
               <input
                 type="password"
                 autoFocus
-                placeholder="Masukkan key (mis. SEVIMA2026)"
+                placeholder="Masukkan key"
                 value={inputKey}
                 onChange={(e) => {
                   setInputKey(e.target.value);
