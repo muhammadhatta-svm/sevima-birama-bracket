@@ -670,18 +670,58 @@
   const scores = {};  // matchId -> [skorTim1, skorTim2] (string), independen dari penanda pemenang
   const ACCESS_KEY = 'SEVIMA2026'; // Ganti key ini sesuai kebutuhan
   const STORAGE_KEY = 'sevima-bracket-state-v1';
+  const STATE_FILE_PATH = 'data/bracket-state.json';
   let isLocked = true;
 
-  function persistState(){
+  function downloadStateFile(state){
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bracket-state.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function persistState(){
+    const state = getSerializableState();
+
     try {
-      const state = getSerializableState();
+      const response = await fetch(STATE_FILE_PATH, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      });
+      if (response.ok) {
+        return true;
+      }
+    } catch (error) {
+      console.warn('PUT file JSON gagal, fallback ke localStorage:', error);
+    }
+
+    try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      return true;
     } catch (error) {
       console.warn('Gagal menyimpan state ke localStorage:', error);
+      return false;
     }
   }
 
-  function restorePersistedState(){
+  async function restorePersistedState(){
+    try {
+      const response = await fetch(STATE_FILE_PATH, { cache: 'no-store' });
+      if (response.ok) {
+        const data = await response.json();
+        applySerializableState(data);
+        return true;
+      }
+    } catch (error) {
+      console.warn('Gagal memuat state dari file JSON, fallback ke localStorage:', error);
+    }
+
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if(!raw) return false;
@@ -1098,6 +1138,7 @@
     return {
       version: 1,
       savedAt: new Date().toISOString(),
+      isLocked: isLocked,
       teams: teams.map(([name, code])=> [name, code]),
       winners: {...winners},
       scores: Object.fromEntries(
@@ -1110,6 +1151,10 @@
   function applySerializableState(data){
     if(!data || !Array.isArray(data.teams) || data.teams.length!==teams.length){
       throw new Error('Format file JSON tidak valid (teams).');
+    }
+
+    if(Object.prototype.hasOwnProperty.call(data, 'isLocked')){
+      isLocked = Boolean(data.isLocked);
     }
 
     data.teams.forEach((pair, idx)=>{
@@ -1172,21 +1217,11 @@
     renderAll();
   });
 
-  saveJsonBtn.addEventListener('click', ()=>{
+  saveJsonBtn.addEventListener('click', async ()=>{
     if(isLocked) return;
     const state = getSerializableState();
-    const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const now = new Date();
-    const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}${String(now.getSeconds()).padStart(2,'0')}`;
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `bracket-badminton-${stamp}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    persistState();
+    downloadStateFile(state);
+    await persistState();
   });
 
   loadJsonBtn.addEventListener('click', ()=>{
@@ -1201,7 +1236,9 @@
       const text = await file.text();
       const data = JSON.parse(text);
       applySerializableState(data);
+      updateLockUI();
       renderAll();
+      await persistState();
     } catch(err){
       window.alert('Gagal memuat JSON. Pastikan file JSON valid.');
     }
@@ -1240,9 +1277,10 @@
     });
   });
 
-  restorePersistedState();
-  updateLockUI();
-  renderAll();
+  restorePersistedState().finally(() => {
+    updateLockUI();
+    renderAll();
+  });
 })();
 </script>
 </body>
