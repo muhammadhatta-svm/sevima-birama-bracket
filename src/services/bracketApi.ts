@@ -1,5 +1,5 @@
 import { BracketState, TeamPair } from '../types/bracket';
-import { STATE_FILE_PATH, DEFAULT_TEAMS, MATCHES } from '../utils/bracketLogic';
+import { DEFAULT_TEAMS, MATCHES } from '../utils/bracketLogic';
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -48,22 +48,6 @@ export async function restorePersistedState(): Promise<BracketState | null> {
     }
   } catch (error) {
     console.warn('Gagal memuat state dari BE API:', error);
-  }
-
-  // Fallback opsional ke static JSON file jika backend belum mengembalikan data
-  try {
-    const response = await fetch(STATE_FILE_PATH, {
-      cache: 'no-store',
-      headers: { 'x-token': 'sevima2026' },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      if (validateStateData(data)) {
-        return sanitizeStateData(data);
-      }
-    }
-  } catch (error) {
-    // Ignore static fetch error
   }
 
   return null;

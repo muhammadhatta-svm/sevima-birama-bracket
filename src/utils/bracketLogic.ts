@@ -13,7 +13,6 @@ import {
 
 export const ACCESS_KEY = 'SEVIMA2026';
 export const STORAGE_KEY = 'sevima-bracket-state-v1';
-export const STATE_FILE_PATH = 'data/bracket-state.json';
 
 export const DEFAULT_TEAMS: TeamPair[] = [
   ["Pras - Ega", "D22A"], ["Aden - Laila", "D10"],
