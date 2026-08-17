@@ -16,7 +16,7 @@ export const STORAGE_KEY = 'sevima-bracket-state-v1';
 
 export const DEFAULT_TEAMS: TeamPair[] = [
   ["Pras - Ega", "D22A"], ["Aden - Laila", "D10"],
-  ["Reva - Nanda", "D14B"], ["Afrizal - Bella", "D18"],
+  ["Reva - Nanda", "D14B"], ["Afrizal - Nadiyah", "D18"],
   ["Yoga - Frida", "D19B"], ["Safaat - Devi", "D25B"],
   ["Alam - Ferli", "D24A"], ["Fauzan - Sabrina", "D9"],
   ["Faaris - Nurin", "D22B"], ["Agus - Murni", "D23B"],
