@@ -65,11 +65,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({
           type="button"
           disabled={isLocked || isTbd1}
           onClick={() => onPickWinner(match.id, 1)}
-          className={`flex items-center gap-2 overflow-hidden flex-1 min-w-0 h-full text-left bg-transparent border-0 p-0 ${
-            isLocked || isTbd1 ? 'cursor-default' : 'cursor-pointer hover:bg-[#d7ff4e]/10 focus:outline-none focus:ring-1 focus:ring-[#d7ff4e]'
+          className={`flex items-center justify-between gap-1.5 overflow-hidden flex-1 min-w-0 h-full text-left bg-transparent border-0 p-0 ${
+            isLocked || isTbd1
+              ? 'cursor-default'
+              : 'cursor-pointer hover:bg-[#d7ff4e]/10 focus:outline-none focus:ring-1 focus:ring-[#d7ff4e] rounded'
           }`}
+          title={isLocked ? 'Input terkunci' : isTbd1 ? 'Tim belum ditentukan' : `Pilih ${team1Name} sebagai pemenang`}
         >
-          <div className="flex flex-col overflow-hidden leading-none">
+          <div className="flex flex-col overflow-hidden leading-none min-w-0 flex-1">
             <span
               className={`truncate text-[13px] ${isPre ? 'text-[12px]' : ''} ${
                 isWinner1
@@ -89,6 +92,18 @@ export const MatchCard: React.FC<MatchCardProps> = ({
               </span>
             )}
           </div>
+
+          <div
+            className={`w-3.5 h-3.5 rounded-full shrink-0 border flex items-center justify-center transition-all ${
+              isWinner1
+                ? 'border-[#d7ff4e] bg-[#d7ff4e]'
+                : 'border-[#33517a]'
+            }`}
+          >
+            {isWinner1 && (
+              <div className="w-1 h-2 border-r-2 border-b-2 border-[#0c1f3a] rotate-45 -translate-y-0.5" />
+            )}
+          </div>
         </button>
 
         <input
@@ -98,24 +113,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({
           placeholder="-"
           disabled={isLocked || isTbd1}
           value={scores[0] || ''}
+          onClick={(e) => e.stopPropagation()}
           onChange={(e) => onScoreChange(match.id, 1, e.target.value)}
           className={`shrink-0 text-center bg-white/5 border border-[#33517a] rounded text-[#eef3f8] font-['JetBrains_Mono',monospace] placeholder-[#4d6488] focus:outline-none focus:ring-1 focus:ring-[#d7ff4e] focus:border-[#d7ff4e] disabled:opacity-35 ${
             isPre ? 'w-[18px] text-[9px] py-0 px-0' : 'w-[22px] text-[11px] py-0 px-0'
           }`}
           aria-label="Skor tim 1"
         />
-
-        <div
-          className={`w-3.5 h-3.5 rounded-full shrink-0 border flex items-center justify-center ${
-            isWinner1
-              ? 'border-[#d7ff4e] bg-[#d7ff4e]'
-              : 'border-[#33517a]'
-          }`}
-        >
-          {isWinner1 && (
-            <div className="w-1 h-2 border-r-2 border-b-2 border-[#0c1f3a] rotate-45 -translate-y-0.5" />
-          )}
-        </div>
       </div>
 
       <div className="h-[1px] bg-[#33517a] w-full" />
@@ -130,11 +134,14 @@ export const MatchCard: React.FC<MatchCardProps> = ({
           type="button"
           disabled={isLocked || isTbd2}
           onClick={() => onPickWinner(match.id, 2)}
-          className={`flex items-center gap-2 overflow-hidden flex-1 min-w-0 h-full text-left bg-transparent border-0 p-0 ${
-            isLocked || isTbd2 ? 'cursor-default' : 'cursor-pointer hover:bg-[#d7ff4e]/10 focus:outline-none focus:ring-1 focus:ring-[#d7ff4e]'
+          className={`flex items-center justify-between gap-1.5 overflow-hidden flex-1 min-w-0 h-full text-left bg-transparent border-0 p-0 ${
+            isLocked || isTbd2
+              ? 'cursor-default'
+              : 'cursor-pointer hover:bg-[#d7ff4e]/10 focus:outline-none focus:ring-1 focus:ring-[#d7ff4e] rounded'
           }`}
+          title={isLocked ? 'Input terkunci' : isTbd2 ? 'Tim belum ditentukan' : `Pilih ${team2Name} sebagai pemenang`}
         >
-          <div className="flex flex-col overflow-hidden leading-none">
+          <div className="flex flex-col overflow-hidden leading-none min-w-0 flex-1">
             <span
               className={`truncate text-[13px] ${isPre ? 'text-[12px]' : ''} ${
                 isWinner2
@@ -154,6 +161,18 @@ export const MatchCard: React.FC<MatchCardProps> = ({
               </span>
             )}
           </div>
+
+          <div
+            className={`w-3.5 h-3.5 rounded-full shrink-0 border flex items-center justify-center transition-all ${
+              isWinner2
+                ? 'border-[#d7ff4e] bg-[#d7ff4e]'
+                : 'border-[#33517a]'
+            }`}
+          >
+            {isWinner2 && (
+              <div className="w-1 h-2 border-r-2 border-b-2 border-[#0c1f3a] rotate-45 -translate-y-0.5" />
+            )}
+          </div>
         </button>
 
         <input
@@ -163,24 +182,13 @@ export const MatchCard: React.FC<MatchCardProps> = ({
           placeholder="-"
           disabled={isLocked || isTbd2}
           value={scores[1] || ''}
+          onClick={(e) => e.stopPropagation()}
           onChange={(e) => onScoreChange(match.id, 2, e.target.value)}
           className={`shrink-0 text-center bg-white/5 border border-[#33517a] rounded text-[#eef3f8] font-['JetBrains_Mono',monospace] placeholder-[#4d6488] focus:outline-none focus:ring-1 focus:ring-[#d7ff4e] focus:border-[#d7ff4e] disabled:opacity-35 ${
             isPre ? 'w-[18px] text-[9px] py-0 px-0' : 'w-[22px] text-[11px] py-0 px-0'
           }`}
           aria-label="Skor tim 2"
         />
-
-        <div
-          className={`w-3.5 h-3.5 rounded-full shrink-0 border flex items-center justify-center ${
-            isWinner2
-              ? 'border-[#d7ff4e] bg-[#d7ff4e]'
-              : 'border-[#33517a]'
-          }`}
-        >
-          {isWinner2 && (
-            <div className="w-1 h-2 border-r-2 border-b-2 border-[#0c1f3a] rotate-45 -translate-y-0.5" />
-          )}
-        </div>
       </div>
     </div>
   );

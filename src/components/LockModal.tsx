@@ -70,13 +70,18 @@ export const LockModal: React.FC<LockModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           {isLocked && (
             <div>
-              <label className="block text-[12px] font-['JetBrains_Mono',monospace] text-[#7d93b8] mb-1.5 uppercase">
-                Access Key
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-[12px] font-['JetBrains_Mono',monospace] text-[#7d93b8] uppercase">
+                  Access Key
+                </label>
+                <span className="text-[11px] font-['JetBrains_Mono',monospace] text-[#d7ff4e]/80">
+                  Key: {ACCESS_KEY}
+                </span>
+              </div>
               <input
                 type="password"
                 autoFocus
-                placeholder="Masukkan key"
+                placeholder={`Masukkan key (misal: ${ACCESS_KEY})`}
                 value={inputKey}
                 onChange={(e) => {
                   setInputKey(e.target.value);

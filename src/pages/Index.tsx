@@ -169,6 +169,7 @@ const Index: React.FC = () => {
             isLocked={isLocked}
             onReset={handleReset}
             onSaveJson={handleSaveJson}
+            onLoadJson={handleLoadJson}
           />
           <BracketView
             teams={teams}

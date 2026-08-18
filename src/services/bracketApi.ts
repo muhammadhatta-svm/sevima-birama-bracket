@@ -1,5 +1,5 @@
 import { BracketState, TeamPair } from '../types/bracket';
-import { DEFAULT_TEAMS, MATCHES } from '../utils/bracketLogic';
+import { DEFAULT_TEAMS, MATCHES, STORAGE_KEY } from '../utils/bracketLogic';
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -10,10 +10,17 @@ export const BACKEND_BRACKET_ENDPOINT = `${API_URL.replace(/\/$/, '')}/chatbot/b
 export const AUTH_HEADERS = {
   'Content-Type': 'application/json',
   'Authorization': 'Bearer sevima2026',
-  'x-token': 'sevima2026',
 };
 
 export async function persistState(state: BracketState): Promise<boolean> {
+  let localSaved = false;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localSaved = true;
+  } catch (err) {
+    console.warn('Gagal menyimpan state ke localStorage:', err);
+  }
+
   try {
     const response = await fetch(BACKEND_BRACKET_ENDPOINT, {
       method: 'POST',
@@ -24,12 +31,12 @@ export async function persistState(state: BracketState): Promise<boolean> {
       return true;
     } else {
       console.warn('POST state ke BE API gagal dengan status:', response.status);
-      return false;
     }
   } catch (error) {
     console.error('Gagal mengirim state ke Backend API:', error);
-    return false;
   }
+
+  return localSaved;
 }
 
 export async function restorePersistedState(): Promise<BracketState | null> {
@@ -43,11 +50,28 @@ export async function restorePersistedState(): Promise<BracketState | null> {
       const json = await response.json();
       const data = json?.data || json;
       if (validateStateData(data)) {
-        return sanitizeStateData(data);
+        const sanitized = sanitizeStateData(data);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+        } catch (_) {}
+        return sanitized;
       }
     }
   } catch (error) {
     console.warn('Gagal memuat state dari BE API:', error);
+  }
+
+  // Fallback ke localStorage jika API error atau tidak mengembalikan data
+  try {
+    const local = localStorage.getItem(STORAGE_KEY);
+    if (local) {
+      const data = JSON.parse(local);
+      if (validateStateData(data)) {
+        return sanitizeStateData(data);
+      }
+    }
+  } catch (error) {
+    console.warn('Gagal memuat state dari localStorage:', error);
   }
 
   return null;
