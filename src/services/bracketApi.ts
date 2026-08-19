@@ -1,9 +1,7 @@
 import { BracketState, TeamPair } from '../types/bracket';
 import { DEFAULT_TEAMS, MATCHES, STORAGE_KEY } from '../utils/bracketLogic';
 
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? '/api' : 'https://api.sinumapat-ai.id/api');
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const BACKEND_BRACKET_ENDPOINT = `${API_URL.replace(/\/$/, '')}/chatbot/bracket`;
 

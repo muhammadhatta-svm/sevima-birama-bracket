@@ -20,9 +20,7 @@ export interface ChatbotResponseDto {
 }
 
 // Same concept as chatbot-jawa-fe: VITE_API_URL for production (e.g. https://api.sinumapat-ai.id/api), /api in dev via Vite proxy
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? "/api" : "https://api.sinumapat-ai.id/api");
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 /** URL untuk memutar audio lewat proxy backend agar tidak CORS/hotlink dan durasi terbaca. */
 export function getAudioProxyUrl(audioUrl: string): string {
