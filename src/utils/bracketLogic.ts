@@ -244,7 +244,7 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
     date: '2026-08-20',
     dateLabel: 'Kamis, 20 Agustus 2026',
     duration: 40,
-    start: { hour: 18, minute: 0 },
+    start: { hour: 17, minute: 30 },
     windowEnd: { hour: 21, minute: 0 },
     dresscode: 'Baju senada dengan pasangan',
     ids: [...ROUND_IDS.SF, ...ROUND_IDS.P3, ...ROUND_IDS.F],
