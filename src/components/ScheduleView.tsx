@@ -154,7 +154,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ teams, winners, scor
                         };
 
                         return (
-                          <tr key={`wave-${wave}`} className="border-b border-white/5 last:border-b-0">
+                          <tr key={`wave-${wave}`} className="border-b border-white/5">
                             <td className="p-2.5 font-['JetBrains_Mono',monospace] text-[#d7ff4e] font-semibold text-[12px] whitespace-nowrap align-top">
                               {start}–{end}
                             </td>
@@ -164,6 +164,25 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ teams, winners, scor
                           </tr>
                         );
                       })}
+                      {winStartMin + waveCount * day.duration < winEndMin && (
+                        <tr className="border-b border-white/5">
+                          <td className="p-2.5 font-['JetBrains_Mono',monospace] text-[#d7ff4e] font-semibold text-[12px] whitespace-nowrap align-top">
+                            {lastEnd}–{formatClock(winEndMin)}
+                          </td>
+                          {[1, 2, 3].map((courtNum) => (
+                            <td key={`free-end-${courtNum}`} className="p-2.5 align-top">
+                              <div className="inline-flex flex-col gap-0.5 border border-dashed border-[#33517a] rounded-md px-2.5 py-1">
+                                <span className="font-['JetBrains_Mono',monospace] text-[11px] font-bold tracking-[0.08em] text-[#7d93b8]">
+                                  FREE TIME
+                                </span>
+                                <span className="text-[10px] text-[#4d6488] italic">
+                                  bebas dipakai semua pemain
+                                </span>
+                              </div>
+                            </td>
+                          ))}
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

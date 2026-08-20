@@ -47,6 +47,7 @@ export interface DayScheduleConfig {
   windowEnd: { hour: number; minute: number };
   dresscode: string;
   ids: string[];
+  maxCourts?: number;
   waveCount?: number;
 }
 

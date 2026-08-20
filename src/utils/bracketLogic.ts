@@ -186,14 +186,21 @@ export function codeOf(ref: MatchRef, teamsList: TeamPair[]): string | null {
 export function getDependencies(matchId: string): string[] {
   const m = MATCHES[matchId];
   if (!m) return [];
-  return [m.team1, m.team2]
+  const deps = [m.team1, m.team2]
     .filter((ref): ref is { type: 'winnerOf' | 'loserOf'; matchId: string } => ref.type === 'winnerOf' || ref.type === 'loserOf')
     .map((ref) => ref.matchId);
+  if (matchId === 'F-1') {
+    deps.push('P3-1');
+  }
+  return deps;
 }
 
 export const COURT_COUNT = 3;
 
-export function scheduleDayMatches(ids: string[]): { slots: { wave: number; court: number; matchId: string }[]; waveCount: number } {
+export function scheduleDayMatches(
+  ids: string[],
+  maxCourts: number = COURT_COUNT
+): { slots: { wave: number; court: number; matchId: string }[]; waveCount: number } {
   const idSet = new Set(ids);
   const remaining = new Set(ids);
   const finishedWave: Record<string, number> = {};
@@ -210,7 +217,7 @@ export function scheduleDayMatches(ids: string[]): { slots: { wave: number; cour
 
     if (ready.length === 0) break;
 
-    const chosen = ready.slice(0, COURT_COUNT);
+    const chosen = ready.slice(0, maxCourts);
     chosen.forEach((id, ci) => {
       slots.push({ wave, court: ci + 1, matchId: id });
       finishedWave[id] = wave;
@@ -254,7 +261,7 @@ export const INITIAL_SCHEDULE_DAYS: DayScheduleConfig[] = [
 export function computeScheduleSlots(days: DayScheduleConfig[]): { slots: ScheduleSlot[]; updatedDays: DayScheduleConfig[] } {
   const scheduleSlots: ScheduleSlot[] = [];
   const updatedDays = days.map((day) => {
-    const { slots, waveCount } = scheduleDayMatches(day.ids);
+    const { slots, waveCount } = scheduleDayMatches(day.ids, day.maxCourts ?? COURT_COUNT);
     slots.forEach((s) => {
       scheduleSlots.push({
         date: day.date,
